@@ -1,0 +1,26 @@
+image: cirrusci/flutter:stable
+
+pipelines:
+  default:
+    - step: &lint
+        name: Linting
+        script:
+          - flutter analyze
+    - step: &unit_tests
+        name: Unit Tests
+        script:
+          - flutter test --coverage --test-randomize-ordering-seed=random
+    - step: &widget_tests
+        name: Widget Tests
+        script:
+          - flutter test --coverage --test-randomize-ordering-seed=random
+    - step: &build_apk
+        name: Build APK
+        script:
+          - flutter build apk --debug
+        artifacts:
+          - build/app/outputs/**/*.apk
+    - step: &integration_tests
+        name: Integration Tests
+        script:
+          - flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
