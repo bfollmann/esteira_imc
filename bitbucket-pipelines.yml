@@ -10,6 +10,9 @@ pipelines:
           - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
           - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
           - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
+          - export FLUTTER_ROOT="/sdks/flutter"
+          - export PATH="$PATH:$FLUTTER_ROOT/bin"
+          - export PATH="$PATH:$FLUTTER_ROOT/bin/cache/dart-sdk/bin"
           - dart --version
           - flutter --version
           - flutter pub get
@@ -17,10 +20,14 @@ pipelines:
     - step: &unit_tests
         name: Unit Tests
         script:
-          - apt-get update- apt-get install -y wget unzip
+          - apt-get update
+          - apt-get install -y wget unzip
           - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
           - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
           - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
+          - export FLUTTER_ROOT="/sdks/flutter"
+          - export PATH="$PATH:$FLUTTER_ROOT/bin"
+          - export PATH="$PATH:$FLUTTER_ROOT/bin/cache/dart-sdk/bin"
           - dart --version
           - flutter --version
           - flutter pub get
@@ -33,6 +40,9 @@ pipelines:
           - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
           - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
           - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
+          - export FLUTTER_ROOT="/sdks/flutter"
+          - export PATH="$PATH:$FLUTTER_ROOT/bin"
+          - export PATH="$PATH:$FLUTTER_ROOT/bin/cache/dart-sdk/bin"
           - dart --version
           - flutter --version
           - flutter pub get
@@ -45,6 +55,9 @@ pipelines:
           - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
           - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
           - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
+          - export FLUTTER_ROOT="/sdks/flutter"
+          - export PATH="$PATH:$FLUTTER_ROOT/bin"
+          - export PATH="$PATH:$FLUTTER_ROOT/bin/cache/dart-sdk/bin"
           - dart --version
           - flutter --version
           - flutter pub get
@@ -59,6 +72,9 @@ pipelines:
           - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
           - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
           - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
+          - export FLUTTER_ROOT="/sdks/flutter"
+          - export PATH="$PATH:$FLUTTER_ROOT/bin"
+          - export PATH="$PATH:$FLUTTER_ROOT/bin/cache/dart-sdk/bin"
           - dart --version
           - flutter --version
           - flutter pub get
