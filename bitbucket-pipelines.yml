@@ -1,42 +1,41 @@
 image: fischerscode/flutter:3.16.0-19.0.pre
 
-pipelines:
-  default:
-    - step: &lint
-        name: Linting
-        script:
-          - flutter --version
-          - flutter pub get
-          - flutter analyze
-    - step: &unit_tests
-        name: Unit Tests
-        script:
-                - flutter --version
-                - flutter pub get
-                - flutter test --coverage --test-randomize-ordering-seed=random
-    - step: &widget_tests
-        name: Widget Tests
-        script:
-          - flutter --version
-          - flutter pub get
-          - flutter test --coverage --test-randomize-ordering-seed=random
-    - step: &build_apk
-        name: Build APK
-        script:
-          - wget -O sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
-          - unzip sdk-tools.zip -d android-sdk
-          - export ANDROID_HOME=$(pwd)/android-sdk
-          - export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"
-          - yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
-          - "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-33" "build-tools;33.0.0"
-          - flutter --version
-          - flutter pub get
-          - flutter build apk --debug
-        artifacts:
-          - build/app/outputs/**/*.apk
-    - step: &integration_tests
-        name: Integration Tests
-        script:
-          - flutter --version
-          - flutter pub get
-          - flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
+pipelines:default:
+  - step: &lint
+      name: Linting
+      script:
+        - flutter --version
+        - flutter pub get
+        - flutter analyze
+  - step: &unit_tests
+      name: Unit Tests
+      script:
+        - flutter --version
+        - flutter pub get
+        - flutter test --coverage --test-randomize-ordering-seed=random
+  - step: &widget_tests
+      name: Widget Tests
+      script:
+        - flutter --version
+        - flutter pub get
+        - flutter test --coverage --test-randomize-ordering-seed=random
+  - step: &build_apk
+      name: Build APK
+      script:
+        - wget -O sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
+        - unzip sdk-tools.zip -d android-sdk
+        - export ANDROID_HOME=$(pwd)/android-sdk
+        - export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"
+        - yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+        - "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-33" "build-tools;33.0.0"
+        - flutter --version
+        - flutter pub get
+        - flutter build apk --debug
+      artifacts:
+        - build/app/outputs/**/*.apk
+  - step: &integration_tests
+      name: Integration Tests
+      script:
+        - flutter --version
+        - flutter pub get
+        - flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
