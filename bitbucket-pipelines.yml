@@ -1,4 +1,4 @@
-image: cirrusci/flutter:stable
+image: ubuntu:latest
 
 pipelines:
   default:
@@ -6,14 +6,10 @@ pipelines:
         name: Linting
         script:
           - apt-get update
-          - apt-get install -y wget unzip
-          - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
-          - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
-          - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
-          - export FLUTTER_ROOT="/sdks/flutter"
-          - export PATH="$PATH:$FLUTTER_ROOT/bin"
-          - export PATH="$PATH:$FLUTTER_ROOT/bin/cache/dart-sdk/bin"
-          - dart --version
+          - apt-get install -y wget unzip git curl
+          - wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.16.0-stable.tar.xz
+          - tar xf flutter_linux_3.16.0-stable.tar.xz
+          - export PATH="$PATH:$(pwd)/flutter/bin"
           - flutter --version
           - flutter pub get
           - flutter analyze
@@ -21,14 +17,10 @@ pipelines:
         name: Unit Tests
         script:
           - apt-get update
-          - apt-get install -y wget unzip
-          - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
-          - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
-          - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
-          - export FLUTTER_ROOT="/sdks/flutter"
-          - export PATH="$PATH:$FLUTTER_ROOT/bin"
-          - export PATH="$PATH:$FLUTTER_ROOT/bin/cache/dart-sdk/bin"
-          - dart --version
+          - apt-get install -y wget unzip git curl
+          - wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.16.0-stable.tar.xz
+          - tar xf flutter_linux_3.16.0-stable.tar.xz
+          - export PATH="$PATH:$(pwd)/flutter/bin"
           - flutter --version
           - flutter pub get
           - flutter test --coverage --test-randomize-ordering-seed=random
@@ -36,29 +28,20 @@ pipelines:
         name: Widget Tests
         script:
           - apt-get update
-          - apt-get install -y wget unzip
-          - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
-          - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
-          - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
-          - export FLUTTER_ROOT="/sdks/flutter"
-          - export PATH="$PATH:$FLUTTER_ROOT/bin"
-          - export PATH="$PATH:$FLUTTER_ROOT/bin/cache/dart-sdk/bin"
-          - dart --version
-          - flutter --version
-          - flutter pub get
+          - apt-get install -y wget unzip git curl
+          - wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.16.0-stable.tar.xz
+          - tar xf flutter_linux_3.16.0-stable.tar.xz
+          - export PATH="$PATH:$(pwd)/flutter/bin"
+          - flutter --version- flutter pub get
           - flutter test --coverage --test-randomize-ordering-seed=random
     - step: &build_apk
         name: Build APK
         script:
           - apt-get update
-          - apt-get install -y wget unzip
-          - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
-          - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
-          - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
-          - export FLUTTER_ROOT="/sdks/flutter"
-          - export PATH="$PATH:$FLUTTER_ROOT/bin"
-          - export PATH="$PATH:$FLUTTER_ROOT/bin/cache/dart-sdk/bin"
-          - dart --version
+          - apt-get install -y wget unzip git curl
+          - wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.16.0-stable.tar.xz
+          - tar xf flutter_linux_3.16.0-stable.tar.xz
+          - export PATH="$PATH:$(pwd)/flutter/bin"
           - flutter --version
           - flutter pub get
           - flutter build apk --debug
@@ -68,14 +51,10 @@ pipelines:
         name: Integration Tests
         script:
           - apt-get update
-          - apt-get install -y wget unzip
-          - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
-          - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
-          - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
-          - export FLUTTER_ROOT="/sdks/flutter"
-          - export PATH="$PATH:$FLUTTER_ROOT/bin"
-          - export PATH="$PATH:$FLUTTER_ROOT/bin/cache/dart-sdk/bin"
-          - dart --version
+          - apt-get install -y wget unzip git curl
+          - wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.16.0-stable.tar.xz
+          - tar xf flutter_linux_3.16.0-stable.tar.xz
+          - export PATH="$PATH:$(pwd)/flutter/bin"
           - flutter --version
           - flutter pub get
           - flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
