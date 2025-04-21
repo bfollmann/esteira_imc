@@ -5,8 +5,7 @@ pipelines:
     - step: &lint
         name: Linting
         script:
-          - flutter --version
-          - flutter pub get
+          - flutter --version- flutter pub get
           - flutter analyze
     - step: &unit_tests
         name: Unit Tests
