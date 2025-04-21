@@ -1,47 +1,28 @@
-image: ubuntu:latest
+image: fischerscode/flutter:3.16.0-19.0.pre
 
 pipelines:
   default:
     - step: &lint
         name: Linting
         script:
-          - apt-get update
-          - apt-get install -y wget unzip git curl
-          - wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.16.0-stable.tar.xz
-          - tar xf flutter_linux_3.16.0-stable.tar.xz
-          - export PATH="$PATH:$(pwd)/flutter/bin"
           - flutter --version
           - flutter pub get
           - flutter analyze
     - step: &unit_tests
         name: Unit Tests
         script:
-          - apt-get update
-          - apt-get install -y wget unzip git curl
-          - wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.16.0-stable.tar.xz
-          - tar xf flutter_linux_3.16.0-stable.tar.xz
-          - export PATH="$PATH:$(pwd)/flutter/bin"
           - flutter --version
           - flutter pub get
           - flutter test --coverage --test-randomize-ordering-seed=random
     - step: &widget_tests
         name: Widget Tests
         script:
-          - apt-get update
-          - apt-get install -y wget unzip git curl
-          - wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.16.0-stable.tar.xz
-          - tar xf flutter_linux_3.16.0-stable.tar.xz
-          - export PATH="$PATH:$(pwd)/flutter/bin"
-          - flutter --version- flutter pub get
+          - flutter --version
+          - flutter pub get
           - flutter test --coverage --test-randomize-ordering-seed=random
     - step: &build_apk
         name: Build APK
         script:
-          - apt-get update
-          - apt-get install -y wget unzip git curl
-          - wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.16.0-stable.tar.xz
-          - tar xf flutter_linux_3.16.0-stable.tar.xz
-          - export PATH="$PATH:$(pwd)/flutter/bin"
           - flutter --version
           - flutter pub get
           - flutter build apk --debug
@@ -50,11 +31,6 @@ pipelines:
     - step: &integration_tests
         name: Integration Tests
         script:
-          - apt-get update
-          - apt-get install -y wget unzip git curl
-          - wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.16.0-stable.tar.xz
-          - tar xf flutter_linux_3.16.0-stable.tar.xz
-          - export PATH="$PATH:$(pwd)/flutter/bin"
           - flutter --version
           - flutter pub get
           - flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
