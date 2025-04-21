@@ -1,4 +1,4 @@
-image: cirrusci/flutter:3.16.0
+image: cirrusci/flutter:stable
 
 pipelines:
   default:
@@ -17,9 +17,9 @@ pipelines:
     - step: &widget_tests
         name: Widget Tests
         script:
-                - flutter --version
-                - flutter pub get
-                - flutter test --coverage --test-randomize-ordering-seed=random
+          - flutter --version
+          - flutter pub get
+          - flutter test --coverage --test-randomize-ordering-seed=random
     - step: &build_apk
         name: Build APK
         script:
