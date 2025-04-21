@@ -5,7 +5,8 @@ pipelines:
     - step: &lint
         name: Linting
         script:
-          - flutter --version- flutter pub get
+          - flutter --version
+          - flutter pub get
           - flutter analyze
     - step: &unit_tests
         name: Unit Tests
@@ -18,7 +19,7 @@ pipelines:
         script:
           - flutter --version
           - flutter pub get
-          - flutter test --coverage --test-randomize-ordering-seed=random
+          - fluttertest --coverage --test-randomize-ordering-seed=random
     - step: &build_apk
         name: Build APK
         script:
@@ -26,8 +27,8 @@ pipelines:
           - unzip sdk-tools.zip -d android-sdk
           - export ANDROID_HOME=$(pwd)/android-sdk
           - export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"
-          - yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
-          - "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-33" "build-tools;33.0.0"
+          - echo yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+            "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-33" "build-tools;33.0.0"
           - flutter --version
           - flutter pub get
           - flutter build apk --debug
