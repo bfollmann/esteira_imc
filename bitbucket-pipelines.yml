@@ -23,10 +23,9 @@ pipelines:
     - step: &build_apk
         name: Build APK
         script:
-          - apk add wget
+          - /sbin/apk add wget
           - wget -O sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
-          - unzipsdk-tools.zip -d android-sdk
-          - export ANDROID_HOME=$(pwd)/android-sdk
+          - unzip sdk-tools.zip -d android-sdk- export ANDROID_HOME=$(pwd)/android-sdk
           - export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"
           - echo yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
             "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-33" "build-tools;33.0.0"
