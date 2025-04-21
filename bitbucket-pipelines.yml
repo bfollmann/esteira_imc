@@ -1,4 +1,4 @@
-image: cirrusci/flutter:stable
+image: flutter/flutter:3.16.0-stable
 
 pipelines:
   default:
@@ -24,7 +24,8 @@ pipelines:
         name: Build APK
         script:
           - flutter --version
-          - flutter pub get- flutter build apk --debug
+          - flutter pub get
+          - flutter build apk --debug
         artifacts:
           - build/app/outputs/**/*.apk
     - step: &integration_tests
