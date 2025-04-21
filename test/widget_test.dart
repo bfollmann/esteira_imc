@@ -4,7 +4,7 @@ import 'package:esteira_imc/main.dart';
 
 void main() {
   testWidgets('Teste de UI da Calculadora IMC', (WidgetTester tester) async {
-    await tester.pumpWidget(BMICalculatorApp());
+    await tester.pumpWidget(const BMICalculatorApp());
 
     expect(find.text('Calculadora IMC'), findsOneWidget);
     expect(find.byType(TextFormField), findsNWidgets(2));

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(BMICalculatorApp());
+  runApp(const BMICalculatorApp());
 }
 
 class BMICalculatorApp extends StatelessWidget {
@@ -9,12 +9,12 @@ class BMICalculatorApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp( // Removed const here
       title: 'Calculadora IMC',
-      theme: ThemeData(
+      theme: ThemeData( // No const here
         primarySwatch: Colors.blue,
       ),
-      home: BMICalculatorScreen(),
+      home: const BMICalculatorScreen(), // Added const here
     );
   }
 }
@@ -56,7 +56,7 @@ class _BMICalculatorScreenState extends State<BMICalculatorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calculadora IMC'),
+        title: const Text('Calculadora IMC'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,7 +67,7 @@ class _BMICalculatorScreenState extends State<BMICalculatorScreen> {
               TextFormField(
                 controller: _weightController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Peso (kg)'),
+                decoration: const InputDecoration(labelText: 'Peso (kg)'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Informe seu peso';
@@ -78,7 +78,7 @@ class _BMICalculatorScreenState extends State<BMICalculatorScreen> {
               TextFormField(
                 controller: _heightController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Altura (m)'),
+                decoration: const InputDecoration(labelText: 'Altura (m)'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Informe sua altura';
@@ -88,9 +88,9 @@ class _BMICalculatorScreenState extends State<BMICalculatorScreen> {
               ),
               ElevatedButton(
                 onPressed: _calculateBMI,
-                child: Text('Calcular'),
+                child: const Text('Calcular'),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text('Seu IMC: ${_bmi.toStringAsFixed(2)}'),
               Text('Categoria: $_category'),
             ],
