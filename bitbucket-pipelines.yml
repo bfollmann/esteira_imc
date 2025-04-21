@@ -23,6 +23,14 @@ pipelines:
     - step: &build_apk
         name: Build APK
         script:
+          - apt-get update
+          - apt-get install -y wget unzip openjdk-17-jdk
+          - wget -O sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
+          - unzip sdk-tools.zip -d android-sdk
+          - export ANDROID_HOME=$(pwd)/android-sdk
+          - export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"
+          - yes | sdkmanager --licenses
+          - sdkmanager "platforms;android-33" "build-tools;33.0.0"
           - flutter --version
           - flutter pub get
           - flutter build apk --debug
