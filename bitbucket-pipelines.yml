@@ -5,23 +5,47 @@ pipelines:
     - step: &lint
         name: Linting
         script:
+          - apt-get update
+          - apt-get install -y wget unzip
+          - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
+          - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
+          - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
+          - dart --version
           - flutter --version
           - flutter pub get
           - flutter analyze
     - step: &unit_tests
         name: Unit Tests
         script:
+          - apt-get update- apt-get install -y wget unzip
+          - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
+          - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
+          - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
+          - dart --version
           - flutter --version
           - flutter pub get
           - flutter test --coverage --test-randomize-ordering-seed=random
     - step: &widget_tests
         name: Widget Tests
         script:
+          - apt-get update
+          - apt-get install -y wget unzip
+          - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
+          - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
+          - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
+          - dart --version
           - flutter --version
-          - flutter pub get- flutter test --coverage --test-randomize-ordering-seed=random
+          - flutter pub get
+          - flutter test --coverage --test-randomize-ordering-seed=random
     - step: &build_apk
         name: Build APK
         script:
+          - apt-get update
+          - apt-get install -y wget unzip
+          - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
+          - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
+          - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
+          - dart --version
           - flutter --version
           - flutter pub get
           - flutter build apk --debug
@@ -30,6 +54,12 @@ pipelines:
     - step: &integration_tests
         name: Integration Tests
         script:
+          - apt-get update
+          - apt-get install -y wget unzip
+          - wget https://storage.googleapis.com/dart-archive/channels/stable/release/3.1.0/sdk/dartsdk-linux-x64-release.zip
+          - unzip dartsdk-linux-x64-release.zip -d /usr/local/dart-sdk
+          - export PATH="$PATH:/usr/local/dart-sdk/dart-sdk/bin"
+          - dart --version
           - flutter --version
           - flutter pub get
           - flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
