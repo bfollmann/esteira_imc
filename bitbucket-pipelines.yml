@@ -12,7 +12,7 @@ pipelines:
         name: Unit Tests
         script:
           - flutter --version
-          - flutterpub get
+          - flutter pub get
           - flutter test --coverage --test-randomize-ordering-seed=random
     - step: &widget_tests
         name: Widget Tests
