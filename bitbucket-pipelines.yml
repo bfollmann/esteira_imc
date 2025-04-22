@@ -28,7 +28,7 @@ pipelines:
           - sed -i 's/versionName "1.0.0"/versionName "1.0.1"/g' android/app/build.gradle
           - flutter --version
           - flutter pub get
-          - flutter build apk --debug
+          - flutter build apk --release
         artifacts:
           - build/app/outputs/**/*.apk
     - step: &integration_tests
@@ -36,4 +36,4 @@ pipelines:
         script:
           - flutter --version
           - flutter pub get
-          - flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
+          - flutter drive --device-id=emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
