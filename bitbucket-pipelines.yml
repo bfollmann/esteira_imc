@@ -1,4 +1,4 @@
-image: fischerscode/flutter:3.16.0-19.0.pre
+image: growerp/flutter-sdk-image:3.16.0
 
 pipelines:
   default:
@@ -12,7 +12,7 @@ pipelines:
         name: Unit Tests
         script:
           - flutter --version
-          - flutter pub get
+          - flutterpub get
           - flutter test --coverage --test-randomize-ordering-seed=random
     - step: &widget_tests
         name: Widget Tests
@@ -23,13 +23,6 @@ pipelines:
     - step: &build_apk
         name: Build APK
         script:
-          - /usr/bin/apk add wget
-          - wget -O sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
-          - unzip sdk-tools.zip -d android-sdk
-          - export ANDROID_HOME=$(pwd)/android-sdk
-          - export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"
-          - echo yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
-            "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-33" "build-tools;33.0.0"
           - flutter --version
           - flutter pub get
           - flutter build apk --debug
