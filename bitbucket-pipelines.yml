@@ -23,6 +23,9 @@ pipelines:
     - step: &build_apk
         name: Build APK
         script:
+          - sed -i 's/com.example.esteira_imc/com.YOURDOMAIN.esteira_imc/g' android/app/build.gradle
+          - sed -i 's/versionCode 1/versionCode 10/g' android/app/build.gradle
+          - sed -i 's/versionName "1.0.0"/versionName "1.0.1"/g' android/app/build.gradle
           - flutter --version
           - flutter pub get
           - flutter build apk --debug
