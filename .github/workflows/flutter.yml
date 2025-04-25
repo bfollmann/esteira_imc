@@ -43,7 +43,7 @@ jobs:
       - name: Dummy Step (Clear Cache)
         run: echo "Clearing cache..." # This step does nothing, but forces a refresh
       - name: Upload APK
-        uses: github/actions/upload-artifact@v2 # Explicit owner and v2
+        uses: actions/upload-artifact@v3
         with:
           name: app-release.apk
           path: build/app/outputs/apk/release/app-release.apk
