@@ -40,8 +40,6 @@ jobs:
           sed -i 's/versionName "1.0.0"/versionName "1.0.1"/g' android/app/build.gradle
           flutter pub get
           flutter build apk --release
-      - name: Dummy Step (Clear Cache)
-        run: echo "Clearing cache..." # This step does nothing, but forces a refresh
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
