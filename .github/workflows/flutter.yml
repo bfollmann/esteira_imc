@@ -49,9 +49,11 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2 # Set up Android emulator
         with:
           api-level: 30
-          emulator-name: test
+          avd-name: test
           arch: x86_64
           profile: Nexus 6
           script: |
             flutter pub get
+            flutter build apk --debug
+            sleep 60
             flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
