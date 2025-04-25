@@ -46,6 +46,12 @@ jobs:
           name: app-release.apk
           path: build/app/outputs/apk/release/app-release.apk
       - name: Integration Tests
-        run: |
-          flutter pub get
-          flutter drive --device-id=emulator-5554 --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
+        uses: reactivecircus/android-emulator-runner@v2 # Set up Android emulator
+        with:
+          api-level: 30
+          emulator-name: test
+          arch: x86_64
+          profile: Nexus 6
+          script: |
+            flutter pub get
+            flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
