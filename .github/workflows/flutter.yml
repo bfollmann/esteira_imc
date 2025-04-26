@@ -59,16 +59,18 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 23
-          system-image: google_apis # Changed to google_apis
+          target: google_apis # Changed to google_apis
           system-image-api-level: 23
           avd-name: test
           arch: x86
           profile: Nexus 5
           force-avd-creation: false
-          emulator-options: -no-window -no-audio -no-boot-anim -no-snapshot -partition-size 2048 # Added partition-size
-          emulator-boot-timeout: 300
+          emulator-options: -no-window -no-audio -no-boot-anim -no-snapshot -partition-size 2048
+          emulator-boot-timeout: 600 # Increased the timeout to 10 minutes
           pre-emulator-launch-script: |
             echo "Waiting for emulator to boot..."
+            adb wait-for-device
+            adb shell input keyevent 82
           script: |
             flutter pub get
             flutter build apk --debug
