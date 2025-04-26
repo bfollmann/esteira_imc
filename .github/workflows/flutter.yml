@@ -58,15 +58,15 @@ jobs:
       - name: Integration Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 23 # Changed to API 23
-          system-image-api-level: 23 # Changed to API 23
-          target: default # Use a minimal system image
+          api-level: 23
+          system-image: google_apis # Changed to google_apis
+          system-image-api-level: 23
           avd-name: test
-          arch: x86 # Changed to x86
-          profile: Nexus 5 # Use a smaller device profile
+          arch: x86
+          profile: Nexus 5
           force-avd-creation: false
-          emulator-options: -no-window -no-audio -no-boot-anim -no-snapshot # Disable unnecessary features
-          emulator-boot-timeout: 300 # Reduce the timeout to 5 minutes
+          emulator-options: -no-window -no-audio -no-boot-anim -no-snapshot -partition-size 2048 # Added partition-size
+          emulator-boot-timeout: 300
           pre-emulator-launch-script: |
             echo "Waiting for emulator to boot..."
           script: |
