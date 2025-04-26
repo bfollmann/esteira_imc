@@ -22,7 +22,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Install cpu-checker
-        run: sudo apt-get update && sudo apt-get install-y cpu-checker
+        run: sudo apt-get update && sudo apt-get install -y cpu-checker
 
       - name: Check KVM Support
         run: |
