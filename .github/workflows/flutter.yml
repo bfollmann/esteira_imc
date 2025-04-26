@@ -43,14 +43,16 @@ jobs:
       - name: Integration Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 30
+          api-level: 29 # Use a lower API level
+          system-image: system-images;android-29;default;x86_64 # Use a minimal system image
           avd-name: test
           arch: x86_64
-          profile: Nexus 6
+          profile: Nexus 5 # Use a smaller device profile
           force-avd-creation: false
-          emulator-boot-timeout: 600 # Increased timeout to 10 minutes (600 seconds)
+          emulator-options: -no-window -no-audio -no-boot-anim -accel off -no-snapshot # Disable unnecessary features
+          emulator-boot-timeout: 300 # Reduce the timeout to 5 minutes
           pre-emulator-launch-script: |
-            echo"Waiting for emulator to boot..."
+            echo "Waiting for emulator to boot..."
             /usr/local/lib/android/sdk/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
           script: |
             flutter pub get
