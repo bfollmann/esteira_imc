@@ -83,13 +83,26 @@ jobs:
           arch: x86
           profile: Nexus 5
           force-avd-creation: false
-          emulator-options: -no-window -no-audio -no-boot-anim -no-snapshot -partition-size 2048 -gpu swiftshader_indirect
-          emulator-boot-timeout: 600
+          emulator-options: -no-window -no-audio -no-boot-anim -no-snapshot -partition-size 2048 -gpu swiftshader_indirect -accel on
+          emulator-boot-timeout: 1200
           pre-emulator-launch-script: |
             echo "Waiting for emulator to boot..."
-            adb wait-for-device 60
+            adb wait-for-device
+            boot_completed=""
+            timeout=600
+            elapsed=0
+            while [[ "$boot_completed" != "1" && $elapsed -lt $timeout ]]; do
+              sleep 5
+              boot_completed=$(adb shell getprop sys.boot_completed | tr -d '\r')
+              elapsed=$((elapsed + 5))
+              echo "Boot status: $boot_completed. Time elapsed: ${elapsed}s"
+            done
+
+            if [[ "$boot_completed" != "1" ]]; then
+              echo "Emulator failed to boot within ${timeout}s."
+              exit 1
+            fi
             adb shell input keyevent 82
-            adb shell getprop | grep "accel"
           script: |
             flutter pub get
             flutter build apk --debug
