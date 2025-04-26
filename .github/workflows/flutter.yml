@@ -15,30 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-
-      - name: Install cpu-checker
-        run: sudo apt-get update && sudo apt-get install -y cpu-checker
-
-      - name: Check KVM Support
-        run: |
-          if [[ -e /dev/kvm ]]; then
-            echo "KVM device found: /dev/kvm"
-            kvm-ok
-          else
-            echo "KVM device not found: /dev/kvm"
-          fi
-
-      - name: Add User to kvm Group
-        if: success() && contains(steps.check-kvm-support.outputs.stdout, '/dev/kvm')
-        run: |
-          sudo usermod -aG kvm $USER
-          groups $USER
-
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
@@ -74,36 +50,7 @@ jobs:
           path: build/app/outputs/apk/release/app-release.apk
 
       - name: Integration Tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 23
-          target: google_apis
-          system-image-api-level: 23
-          avd-name: test
-          arch: x86
-          profile: Nexus 5
-          force-avd-creation: false
-          emulator-options: -no-window -no-audio -no-boot-anim -no-snapshot -partition-size 2048 -gpu swiftshader_indirect -accel on
-          emulator-boot-timeout: 1200
-          pre-emulator-launch-script: |
-            echo "Waiting for emulator to boot..."
-            adb wait-for-device
-            boot_completed=""
-            timeout=600
-            elapsed=0
-            while [[ "$boot_completed" != "1" && $elapsed -lt $timeout ]]; do
-              sleep 5
-              boot_completed=$(adb shell getprop sys.boot_completed | tr -d '\r')
-              elapsed=$((elapsed + 5))
-              echo "Boot status: $boot_completed. Time elapsed: ${elapsed}s"
-            done
-
-            if [[ "$boot_completed" != "1" ]]; then
-              echo "Emulator failed to boot within ${timeout}s."
-              exit 1
-            fi
-            adb shell input keyevent 82
-          script: |
-            flutter pub get
-            flutter build apk --debug
-            flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
+        run: |
+          flutter pub get
+          flutter build apk --debug
+          flutter test integration_test
