@@ -48,8 +48,9 @@ jobs:
           arch: x86_64
           profile: Nexus 6
           force-avd-creation: false
+          emulator-boot-timeout: 600 # Increased timeout to 10 minutes (600 seconds)
           pre-emulator-launch-script: |
-            echo "Waiting for emulator to boot..."
+            echo"Waiting for emulator to boot..."
             /usr/local/lib/android/sdk/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
           script: |
             flutter pub get
