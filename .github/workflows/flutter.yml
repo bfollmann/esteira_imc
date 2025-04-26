@@ -14,6 +14,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Check KVM Support
+        run: |
+          if [[ -e /dev/kvm ]]; then
+            echo "KVM device found: /dev/kvm"
+            kvm-ok
+          else
+            echo "KVM device not found: /dev/kvm"
+          fi
+      - name: Add User to kvm Group
+        if: success() && contains(steps.check-kvm-support.outputs.stdout, '/dev/kvm')
+        run: |
+          sudo usermod -aG kvm $USER
+          groups $USER
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
@@ -43,14 +56,13 @@ jobs:
       - name: Integration Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
-          system-image-api-level: 29 # Use a lower API level
+          api-level: 23 # Changed to API 23system-image-api-level: 23 # Changed to API 23
           target: default # Use a minimal system image
           avd-name: test
-          arch: x86_64
+          arch: x86 # Changed to x86
           profile: Nexus 5 # Use a smaller device profile
           force-avd-creation: false
-          emulator-options: -no-window -no-audio -no-boot-anim -accel off -no-snapshot # Disable unnecessary features
+          emulator-options: -no-window -no-audio -no-boot-anim -no-snapshot # Disable unnecessary features
           emulator-boot-timeout: 300 # Reduce the timeout to 5 minutes
           pre-emulator-launch-script: |
             echo "Waiting for emulator to boot..."
