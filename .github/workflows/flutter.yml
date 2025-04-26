@@ -83,12 +83,13 @@ jobs:
           arch: x86
           profile: Nexus 5
           force-avd-creation: false
-          emulator-options: -no-window -no-audio -no-boot-anim -no-snapshot -partition-size 2048
+          emulator-options: -no-window -no-audio -no-boot-anim -no-snapshot -partition-size 2048 -gpu swiftshader_indirect
           emulator-boot-timeout: 600
           pre-emulator-launch-script: |
             echo "Waiting for emulator to boot..."
-            adb wait-for-device
+            adb wait-for-device 60
             adb shell input keyevent 82
+            adb shell getprop | grep "accel"
           script: |
             flutter pub get
             flutter build apk --debug
