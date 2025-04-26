@@ -19,7 +19,7 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
       - uses: actions/setup-android@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.16.0'
@@ -34,7 +34,7 @@ jobs:
       - name: Build APK
         run: |
           sed -i 's/com.example.esteira_imc/com.YOURDOMAIN.esteira_imc/g' android/app/build.gradle
-          sed -i 's/versionCode 1/versionCode 10/g' android/app/build.gradle
+          sed -i 's/versionCode1/versionCode 10/g' android/app/build.gradle
           sed -i 's/versionName "1.0.0"/versionName "1.0.1"/g' android/app/build.gradle
           flutter pub get
           flutter build apk --release
