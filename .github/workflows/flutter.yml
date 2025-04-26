@@ -48,9 +48,9 @@ jobs:
           arch: x86_64
           profile: Nexus 6
           force-avd-creation: false
-          pre-launch-script: |
+          pre-emulator-launch-script: |
             echo "Waiting for emulator to boot..."
-            adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+            /usr/local/lib/android/sdk/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
           script: |
             flutter pub get
             flutter build apk --debug
