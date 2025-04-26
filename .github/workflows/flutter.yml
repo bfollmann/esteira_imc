@@ -43,8 +43,9 @@ jobs:
       - name: Integration Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29 # Use a lower API level
-          system-image: system-images;android-29;default;x86_64 # Use a minimal system image
+          api-level: 29
+          system-image-api-level: 29 # Use a lower API level
+          target: default # Use a minimal system image
           avd-name: test
           arch: x86_64
           profile: Nexus 5 # Use a smaller device profile
