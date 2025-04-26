@@ -14,6 +14,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Install cpu-checker
+        run: sudo apt-get update && sudo apt-get install -y cpu-checker
       - name: Check KVM Support
         run: |
           if [[ -e /dev/kvm ]]; then
@@ -56,7 +58,8 @@ jobs:
       - name: Integration Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 23 # Changed to API 23system-image-api-level: 23 # Changed to API 23
+          api-level: 23 # Changed to API 23
+          system-image-api-level: 23 # Changed to API 23
           target: default # Use a minimal system image
           avd-name: test
           arch: x86 # Changed to x86
