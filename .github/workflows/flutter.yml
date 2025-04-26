@@ -45,8 +45,7 @@ jobs:
       - name: Set up emulator
         run: |
           echo "no" | avdmanager create avd -n test -k "system-images;android-30;google_apis;x86_64" -f
-          $ANDROID_HOME/emulator/emulator -avd test -no-window -no-boot-anim -gpu swiftshader_indirect &
-          adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+          $ANDROID_HOME/emulator/emulator -avd test -no-window -no-boot-anim -gpu swiftshader_indirect &adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
       - name: Integration Tests
         run: |
           flutter pub get
