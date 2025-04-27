@@ -65,12 +65,7 @@ jobs:
         run: flutter clean # Clean the build
 
       - name: Build Linux
-        run: flutter build linux --verbose # Build with verbose output
-
-      - name: Run Linux Application Manually
-        run: |
-          chmod +x build/linux/x64/release/bundle/esteira_imc
-          ./build/linux/x64/release/bundle/esteira_imc # Try to run the application manually
+        run: flutter build linux--verbose # Build with verbose output
 
       - name: Integration Tests (Desktop)
         run: flutter test integration_test/app_test.dart -d linux
