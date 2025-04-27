@@ -22,42 +22,21 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.0'
+          flutter-version: 'stable'
 
-      - name: Install dependencies
+      - name: Enable Web Support
+        run: |
+          flutter config --enable-web || echo "Web support already enabled"
+          flutter devices
+
+      - name: Install Dependencies
         run: flutter pub get
 
-      - name: Install Google Chrome
+      - name: Resolve Dependency Issues
         run: |
-          sudo apt-get update
-          sudo apt-get install -y wget unzip apt-transport-https ca-certificates
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
-          google-chrome --version # Verify installation
-
-      - name: Install ChromeDriver
-        run: |
-          # Extract Chrome version
-          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
-          echo "Detected Chrome version: $CHROME_VERSION"
-          
-          # Fetch matching ChromeDriver version
-          DRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION" || echo "")
-          if [ -z "$DRIVER_VERSION" ]; then
-            DRIVER_VERSION=$(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-          fi
-          echo "Detected ChromeDriver version: $DRIVER_VERSION"
-          
-          # Download and install ChromeDriver
-          wget -N "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip"
-          unzip chromedriver_linux64.zip -d /usr/local/bin/
-          rm chromedriver_linux64.zip
-
-      - name: Start ChromeDriver
-        run: |
-          nohup chromedriver --port=4444 > /dev/null 2>&1 &
+          flutter pub outdated || echo "No outdated dependencies"
+          flutter pub upgrade
+          flutter pub get
 
       - name: Linting
         run: flutter analyze
@@ -83,7 +62,5 @@ jobs:
 
       - name: Integration Tests
         run: |
-          flutter config --enable-web
-          flutter devices
           flutter pub get
           flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
