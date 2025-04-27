@@ -52,5 +52,5 @@ jobs:
           name: app-release.apk
           path: build/app/outputs/apk/release/app-release.apk
 
-      - name: Integration Tests (Desktop)
-        run: flutter test integration_test/app_test.dart
+      - name: Integration Tests (Web)
+        run: flutter test integration_test/app_test.dart -d chrome # Added -d chrome
