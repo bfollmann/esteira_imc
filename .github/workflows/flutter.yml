@@ -15,22 +15,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install cpu-checker
+        run: sudo apt-get update && sudo apt-get install -y cpu-checker
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.13.0' # Explicitly set the Flutter version
+          flutter-version: '3.16.0'
 
-      - name: Enable Web Support
-        run: |
-          flutter config --enable-web || echo "Web support already enabled"
-          flutter devices # List available devices
-
-      - name: Install Dependencies
+      - name: Install dependencies
         run: flutter pub get
-
-      - name: Clean Build Setup
-        run: |
-          flutter clean
-          flutter pub get
 
       - name: Linting
         run: flutter analyze
@@ -44,6 +42,8 @@ jobs:
       - name: Build APK
         run: |
           sed -i 's/com.example.esteira_imc/com.YOURDOMAIN.esteira_imc/g' android/app/build.gradle
+          sed -i 's/versionCode 1/versionCode 10/g' android/app/build.gradle
+          sed -i 's/versionName "1.0.0"/versionName "1.0.1"/g' android/app/build.gradle
           flutter build apk --release
 
       - name: Upload APK
@@ -51,3 +51,6 @@ jobs:
         with:
           name: app-release.apk
           path: build/app/outputs/apk/release/app-release.apk
+
+      - name: Integration Tests (Desktop)
+        run: flutter test integration_test/app_test.dart
