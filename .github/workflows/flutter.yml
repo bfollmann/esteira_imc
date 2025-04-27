@@ -27,6 +27,18 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Install ChromeDriver
+        run: |
+          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
+          DRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+          wget -N "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip"
+          unzip chromedriver_linux64.zip -d /usr/local/bin/
+          rm chromedriver_linux64.zip
+
+      - name: Start ChromeDriver
+        run: |
+          nohup chromedriver --port=4444 > /dev/null 2>&1 &
+
       - name: Linting
         run: flutter analyze
 
