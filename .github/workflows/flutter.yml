@@ -1,4 +1,4 @@
-name: FlutterCI
+name: Flutter CI
 
 on:
   push:
@@ -32,9 +32,12 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
+      - name: Print Environment Variables
+        run: env # Print environment variables
+
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.0'
+          flutter-version: '3.10.0' # Try a different Flutter version
 
       - name: Install dependencies
         run: flutter pub get

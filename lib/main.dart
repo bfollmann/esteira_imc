@@ -9,12 +9,12 @@ class BMICalculatorApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp( // Removed const here
+    return MaterialApp(
       title: 'Calculadora IMC',
-      theme: ThemeData( // No const here
+      theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const BMICalculatorScreen(), // Added const here
+      home: const BMICalculatorScreen(),
     );
   }
 }
@@ -65,6 +65,7 @@ class _BMICalculatorScreenState extends State<BMICalculatorScreen> {
           child: Column(
             children: <Widget>[
               TextFormField(
+                key: const Key('weightField'), // Added Key
                 controller: _weightController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Peso (kg)'),
@@ -76,6 +77,7 @@ class _BMICalculatorScreenState extends State<BMICalculatorScreen> {
                 },
               ),
               TextFormField(
+                key: const Key('heightField'), // Added Key
                 controller: _heightController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Altura (m)'),
@@ -87,6 +89,7 @@ class _BMICalculatorScreenState extends State<BMICalculatorScreen> {
                 },
               ),
               ElevatedButton(
+                key: const Key('calculateButton'), // Added Key
                 onPressed: _calculateBMI,
                 child: const Text('Calcular'),
               ),

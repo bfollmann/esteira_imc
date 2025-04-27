@@ -11,9 +11,9 @@ void main() {
       app.main();
       await tester.pumpAndSettle();
 
-      final weightField = find.byType(TextFormField).first;
-      final heightField = find.byType(TextFormField).last;
-      final calculateButton = find.byType(ElevatedButton);
+      final weightField = find.byKey(const Key('weightField')); // Find by Key
+      final heightField = find.byKey(const Key('heightField')); // Find by Key
+      final calculateButton = find.byKey(const Key('calculateButton')); // Find by Key
 
       await tester.enterText(weightField, '70');
       await tester.enterText(heightField, '1.75');
