@@ -20,14 +20,18 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - uses: subosito/flutter-action@v2
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: '3.13.0' # Explicitly set the Flutter version
+
+      - name: Debug Flutter Version
+        run: flutter --version
 
       - name: Enable Web Support
         run: |
-          flutter config --enable-web || echo "Web support already enabled"
-          flutter devices
+          flutter config --enable-web
+          flutter devices # Log available devices
 
       - name: Install Dependencies
         run: flutter pub get
