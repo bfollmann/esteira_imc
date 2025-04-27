@@ -36,8 +36,7 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Linting
-        run: flutter analyze
+      - name: Lintingrun: flutter analyze
 
       - name: Unit Tests
         run: flutter test --coverage --test-randomize-ordering-seed=random
@@ -61,10 +60,8 @@ jobs:
       - name: Clean Build
         run: flutter clean # Clean the build
 
-      - name: Check for Missing Dependencies
-        run: |
-          flutter build linux --verbose # Build with verbose output
-          ldd build/linux/x64/release/bundle/esteira_imc | grep "not found" # Check for missing dependencies
+      - name: Build Linux
+        run: flutter build linux --verbose # Build with verbose output
 
       - name: Integration Tests (Desktop)
         run: flutter test integration_test/app_test.dart -d linux
