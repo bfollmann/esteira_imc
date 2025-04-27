@@ -25,7 +25,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y mesa-utils libglu1-mesa # Install common dependencies
 
       - name: Install cpu-checker
-        run: sudo apt-get update && sudo apt-get install -y cpu-checker
+        run: sudo apt-get update && sudo apt-getinstall -y cpu-checker
 
       - uses: actions/setup-java@v3
         with:
@@ -65,7 +65,7 @@ jobs:
         run: flutter clean # Clean the build
 
       - name: Build Linux
-        run: flutter build linux--verbose # Build with verbose output
+        run: flutter build linux --verbose # Build with verbose output
 
       - name: Integration Tests (Desktop)
         run: flutter test integration_test/app_test.dart -d linux
