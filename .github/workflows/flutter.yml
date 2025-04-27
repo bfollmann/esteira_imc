@@ -1,4 +1,4 @@
-name: Flutter CI
+name: FlutterCI
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y mesa-utils libglu1-mesa # Install common dependencies
 
       - name: Install cpu-checker
-        run: sudo apt-get update && sudo apt-getinstall -y cpu-checker
+        run: sudo apt-get update && sudo apt-get install -y cpu-checker
 
       - uses: actions/setup-java@v3
         with:
