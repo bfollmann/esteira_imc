@@ -36,7 +36,8 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Lintingrun: flutter analyze
+      - name: Linting
+        run: flutter analyze
 
       - name: Unit Tests
         run: flutter test --coverage --test-randomize-ordering-seed=random
