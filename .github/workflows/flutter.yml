@@ -37,13 +37,30 @@ jobs:
           sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
           google-chrome --version
 
-      # Install Matching Chromedriver
-      - name: Install Matching Chromedriver
+      # Install Matching Chromedriver (with fallback logic)
+      - name: Install Chromedriver with Fallback
         run: |
           CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+' | head -n 1)
-          echo "Detected Chrome version: $CHROME_VERSION"
-          CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
-          echo "Matching Chromedriver version: $CHROMEDRIVER_VERSION"
+          CHROME_MAJOR_VERSION=$(echo $CHROME_VERSION | cut -d. -f1)
+          echo "Detected Chrome version: $CHROME_VERSION (Major: $CHROME_MAJOR_VERSION)"
+
+          # Try to find the exact matching Chromedriver version
+          CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION} || true)
+          if [ -z "$CHROMEDRIVER_VERSION" ]; then
+            # If exact version is not found, fallback to the major version
+            CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_MAJOR_VERSION} || true)
+          fi
+          if [ -z "$CHROMEDRIVER_VERSION" ]; then
+            # If major version is not found, fallback to the latest stable release
+            CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE || true)
+          fi
+
+          if [ -z "$CHROMEDRIVER_VERSION" ]; then
+            echo "Failed to find a matching Chromedriver version."
+            exit 1
+          fi
+
+          echo "Using Chromedriver version: $CHROMEDRIVER_VERSION"
           wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/bin/
