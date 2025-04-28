@@ -43,7 +43,7 @@ jobs:
           sudo mv chromedriver-linux/chromedriver-linux64/chromedriver /usr/bin/
 
           # Verify installations
-          /usr/local/chrome/chrome-linux/chrome --version
+          /usr/local/chrome/chrome-linux/chrome-linux --version
           chromedriver --version
 
       # Start Chromedriver
