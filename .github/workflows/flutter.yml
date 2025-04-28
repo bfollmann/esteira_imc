@@ -24,50 +24,24 @@ jobs:
       - name: Enable Flutter Web Support
         run: flutter config --enable-web
 
-      # Install dependencies required for Chrome
-      - name: Install Dependencies for Chrome
+      # Install Pre-built Chromium and Chromedriver
+      - name: Install Pre-built Chromium and Chromedriver
         run: |
-          sudo apt-get update
-          sudo apt-get install -y software-properties-common apt-transport-https wget
+          # Version to use (example: 114.0.5735.90)
+          CHROMIUM_VERSION="114.0.5735.90"
 
-      # Install Google Chrome
-      - name: Install Google Chrome
-        run: |
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
-          google-chrome --version
+          # Download Chromium
+          wget https://commondatastorage.googleapis.com/chromium-browser-snapshots/Linux_x64/$CHROMIUM_VERSION/chrome-linux.zip
+          unzip chrome-linux.zip
+          sudo mv chrome-linux /usr/local/chromium
 
-      # Install Matching Chromedriver (with improved error handling)
-      - name: Install Chromedriver with Fallback
-        run: |
-          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+' | head -n 1)
-          CHROME_MAJOR_VERSION=$(echo $CHROME_VERSION | cut -d. -f1)
-          echo "Detected Chrome version: $CHROME_VERSION (Major: $CHROME_MAJOR_VERSION)"
-
-          # Try to fetch the exact Chromedriver version
-          CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
-          if [[ "$CHROMEDRIVER_VERSION" == *"<Error>"* ]] || [ -z "$CHROMEDRIVER_VERSION" ]; then
-            echo "Exact Chromedriver version not found for $CHROME_VERSION. Falling back to major version $CHROME_MAJOR_VERSION."
-            CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAJOR_VERSION)
-          fi
-
-          # Fallback to the latest release if major version is also unavailable
-          if [[ "$CHROMEDRIVER_VERSION" == *"<Error>"* ]] || [ -z "$CHROMEDRIVER_VERSION" ]; then
-            echo "Major Chromedriver version not found for $CHROME_MAJOR_VERSION. Falling back to the latest release."
-            CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-          fi
-
-          # Exit if no valid Chromedriver version is found
-          if [[ "$CHROMEDRIVER_VERSION" == *"<Error>"* ]] || [ -z "$CHROMEDRIVER_VERSION" ]; then
-            echo "Failed to find a matching Chromedriver version."
-            exit 1
-          fi
-
-          echo "Using Chromedriver version: $CHROMEDRIVER_VERSION"
-          wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+          # Download Chromedriver
+          wget https://chromedriver.storage.googleapis.com/$CHROMIUM_VERSION/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/bin/
-          rm chromedriver_linux64.zip
+
+          # Verify Installation
+          /usr/local/chromium/chrome --version
           chromedriver --version
 
       # Start Chromedriver
@@ -83,5 +57,5 @@ jobs:
       # Run integration tests using the web-server device
       - name: Run Integration Tests with Web-Server
         env:
-          CHROME_EXECUTABLE: /usr/bin/google-chrome --headless --disable-gpu --no-sandbox
+          CHROME_EXECUTABLE: /usr/local/chromium/chrome --headless --disable-gpu --no-sandbox
         run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
