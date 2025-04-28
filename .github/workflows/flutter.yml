@@ -54,8 +54,6 @@ jobs:
       - name: Clear Flutter Cache
         run: flutter clean && flutter pub get
 
-      # Run Integration Tests with Flutter Drive
-      - name: Run Integration Tests with Flutter Drive
-        env:
-          CHROME_EXECUTABLE: "/usr/local/chrome/chrome-linux64/chrome --no-sandbox"
-        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d chrome
+      # Run Integration Tests with Web-Server
+      - name: Run Integration Tests with Web-Server
+        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server --device-timeout 60
