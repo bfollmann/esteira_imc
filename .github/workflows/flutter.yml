@@ -24,27 +24,21 @@ jobs:
       - name: Enable Flutter Web Support
         run: flutter config --enable-web
 
-      # Install Chrome for Testing and Chromedriver
-      - name: Install Chrome for Testing and Chromedriver
+      # Install ChromeDriver
+      - name: Install ChromeDriver
         run: |
-          # Define Chrome version and URLs
-          CHROME_VERSION="135.0.7049.114"
-          CHROME_URL="https://storage.googleapis.com/chrome-for-testing-public/$CHROME_VERSION/linux64/chrome-linux64.zip"
-          CHROMEDRIVER_URL="https://storage.googleapis.com/chrome-for-testing-public/$CHROME_VERSION/linux64/chromedriver-linux64.zip"
+          npm install -g @puppeteer/browsers
+          npx @puppeteer/browsers install chromedriver@stable
 
-          # Download and install Chrome for Testing
-          wget $CHROME_URL -O chrome-linux64.zip
-          unzip chrome-linux64.zip -d chrome-linux64
-          sudo mv chrome-linux64 /usr/local/chrome
+      # Verify ChromeDriver
+      - name: Verify ChromeDriver Installation
+        run: chromedriver --version
 
-          # Download and install Chromedriver
-          wget $CHROMEDRIVER_URL -O chromedriver-linux64.zip
-          unzip chromedriver-linux64.zip -d chromedriver-linux64
-          sudo mv chromedriver-linux64/chromedriver-linux64/chromedriver /usr/bin/
-
-          # Verify installations
-          /usr/local/chrome/chrome-linux64/chrome --version
-          chromedriver --version
+      # Start ChromeDriver
+      - name: Start ChromeDriver
+        run: |
+          chromedriver --port=4444 &
+          sleep 5 # Allow time for ChromeDriver to start
 
       # Verify Chrome Device
       - name: Verify Chrome Device
@@ -56,4 +50,4 @@ jobs:
 
       # Run Integration Tests with Web-Server
       - name: Run Integration Tests with Web-Server
-        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server --device-timeout 60
+        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
