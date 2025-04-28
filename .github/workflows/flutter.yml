@@ -29,8 +29,8 @@ jobs:
       - name: Install Chrome and Chromedriver
         run: |
           sudo apt-get install -y chromium-browser chromium-chromedriver
-          export PATH=$PATH:/usr/lib/chromium-browser/
+          export PATH=$PATH:/usr/bin/
       - name: Run Integration Tests
         env:
-          CHROME_EXECUTABLE: chromium-browser --headless --disable-gpu --no-sandbox
+          CHROME_EXECUTABLE: /snap/bin/chromium --headless --disable-gpu --no-sandbox
         run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d chrome
