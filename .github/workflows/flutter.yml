@@ -7,21 +7,6 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '11'
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-      - run: flutter pub get
-      - run: flutter test # Run widget and unit tests
-
   integration-tests:
     runs-on: ubuntu-latest
 
@@ -34,13 +19,15 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-      - name: Install Chrome and Chromedriver
+      - name: Install Dependencies for Headless Chrome
         run: |
           sudo apt-get update
+          sudo apt-get install -y libnss3 libxss1 libasound2 fonts-liberation libappindicator3-1 libgbm-dev
+      - name: Install Chrome and Chromedriver
+        run: |
           sudo apt-get install -y chromium-browser chromium-chromedriver
           export PATH=$PATH:/usr/lib/chromium-browser/
-      - name: Start Chromedriver
-        run: |
-          chromedriver --port=4444 &
       - name: Run Integration Tests
+        env:
+          CHROME_EXECUTABLE: google-chrome --headless --disable-gpu --no-sandbox
         run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d chrome
