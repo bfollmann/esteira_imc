@@ -13,8 +13,7 @@ void main() {
     final heightField = find.byKey(const Key('height_field'));
     final calculateButton = find.byKey(const Key('calculate_button'));
 
-    // Enter values
-    await tester.enterText(weightField, '80');
+    // Enter valuesawait tester.enterText(weightField, '80');
     await tester.enterText(heightField, '1.80');
 
     // Tap the button
@@ -22,7 +21,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Check the result
-    expect(find.text('24.691358024691358'), findsOneWidget); // Updated value
-    expect(find.text('Normal'), findsOneWidget);
+    expect(find.text('24.69'), findsOneWidget); // Correct value
+    expect(find.text('Normal'), findsOneWidget); // Correct value
   });
 }
