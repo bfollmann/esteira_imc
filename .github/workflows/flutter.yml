@@ -19,8 +19,12 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+
+      # Enable web support for Flutter
       - name: Enable Flutter Web Support
         run: flutter config --enable-web
+
+      # Install dependencies required for Chromium browser
       - name: Install Dependencies for Headless Chrome
         run: |
           sudo apt-get update
@@ -28,14 +32,38 @@ jobs:
           sudo add-apt-repository universe
           sudo apt-get update
           sudo apt-get install -y libnss3 libxss1 libasound2 fonts-liberation libappindicator3-1 libgbm-dev || sudo apt-get install -y liboss4-salsa-asound2
-      - name: Install Chromedriver
+
+      # Install Chromium browser and validate versions
+      - name: Install and Validate Chromium and Chromedriver
         run: |
-          sudo apt-get install -y chromium-browser chromium-chromedriver
-          export PATH=$PATH:/usr/bin/
+          # Install chromium-browser
+          sudo apt-get install -y chromium-browser
+          
+          # Get Chromium version
+          CHROMIUM_VERSION=$(/snap/bin/chromium --version | grep -oP '\d+\.\d+\.\d+')
+          echo "Chromium version: $CHROMIUM_VERSION"
+
+          # Download matching Chromedriver version
+          wget https://chromedriver.storage.googleapis.com/$CHROMIUM_VERSION/chromedriver_linux64.zip || { echo "Chromedriver version $CHROMIUM_VERSION not found"; exit 1; }
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/bin/
+          rm chromedriver_linux64.zip
+
+          # Validate Chromedriver version
+          chromedriver --version
+
+      # Start Chromedriver
       - name: Start Chromedriver
         run: |
           nohup chromedriver --port=4444 --url-base=/wd/hub --whitelisted-ips &
-      - name: Run Integration Tests
+
+      # Verify Chromedriver is running on port 4444
+      - name: Verify Chromedriver on Port 4444
+        run: |
+          netstat -tuln | grep 4444 || { echo "Chromedriver not running on port 4444"; exit 1; }
+
+      # Run integration tests using the web-server device
+      - name: Run Integration Tests with Web-Server
         env:
           CHROME_EXECUTABLE: /snap/bin/chromium --headless --disable-gpu --no-sandbox
         run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
