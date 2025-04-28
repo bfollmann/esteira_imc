@@ -9,9 +9,9 @@ void main() {
     await tester.pumpAndSettle();
 
     // Find the input fields and the button
-    final weightField = find.byKey(const Key('weight_field'));
-    final heightField = find.byKey(const Key('height_field'));
-    final calculateButton = find.byKey(const Key('calculate_button'));
+    final weightField = find.byKey(const Key('weightField')); // Corrected key
+    final heightField = find.byKey(const Key('heightField')); // Corrected key
+    final calculateButton = find.byKey(const Key('calculateButton')); // Corrected key
 
     // Enter values
     await tester.enterText(weightField, '80');
@@ -22,7 +22,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Check the result
-    expect(find.text('24.69'), findsOneWidget); // Correct value
-    expect(find.text('Normal weight'), findsOneWidget); // Correct value
+    expect(find.text('Seu IMC: 24.69'), findsOneWidget); // Corrected text
+    expect(find.text('Categoria: Peso normal'), findsOneWidget); // Corrected text
   });
 }

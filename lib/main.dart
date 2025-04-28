@@ -15,8 +15,7 @@ class BMICalculatorApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const BMICalculatorScreen(),
-    );
+      home: const BMICalculatorScreen(),);
   }
 }
 
@@ -59,7 +58,7 @@ class _BMICalculatorScreenState extends State<BMICalculatorScreen> {
           child: Column(
             children: <Widget>[
               TextFormField(
-                key: const Key('weightField'), // Added Key
+                key: const Key('weightField'), // Corrected key
                 controller: _weightController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Peso (kg)'),
@@ -71,25 +70,24 @@ class _BMICalculatorScreenState extends State<BMICalculatorScreen> {
                 },
               ),
               TextFormField(
-                key: const Key('heightField'), // Added Key
+                key: const Key('heightField'), // Corrected key
                 controller: _heightController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Altura (m)'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Informe sua altura';
-                  }
-                  return null;
+                validator: (value) {if (value == null || value.isEmpty) {
+                  return 'Informe sua altura';
+                }
+                return null;
                 },
               ),
               ElevatedButton(
-                key: const Key('calculateButton'), // Added Key
+                key: const Key('calculateButton'), // Corrected key
                 onPressed: _calculateBMI,
                 child: const Text('Calcular'),
               ),
               const SizedBox(height: 20),
-              Text('Seu IMC: ${_bmi.toStringAsFixed(2)}'),
-              Text('Categoria: $_category'),
+              Text('Seu IMC: ${_bmi.toStringAsFixed(2)}'), // Corrected text
+              Text('Categoria: $_category'), // Corrected text
             ],
           ),
         ),
