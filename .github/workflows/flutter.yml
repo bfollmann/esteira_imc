@@ -33,23 +33,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libnss3 libxss1 libasound2 fonts-liberation libappindicator3-1 libgbm-dev || sudo apt-get install -y liboss4-salsa-asound2
 
-      # Install Chromium browser and validate versions
-      - name: Install and Validate Chromium and Chromedriver
-        run: |
-          # Install chromium-browser
-          sudo apt-get install -y chromium-browser
-          
-          # Get Chromium version
-          CHROMIUM_VERSION=$(/snap/bin/chromium --version | grep -oP '\d+\.\d+\.\d+')
-          echo "Chromium version: $CHROMIUM_VERSION"
+      # Install Chromium browser
+      - name: Install Chromium Browser
+        run: sudo apt-get install -y chromium-browser
 
-          # Download matching Chromedriver version
-          wget https://chromedriver.storage.googleapis.com/$CHROMIUM_VERSION/chromedriver_linux64.zip || { echo "Chromedriver version $CHROMIUM_VERSION not found"; exit 1; }
+      # Install closest matching Chromedriver version
+      - name: Install Closest Chromedriver Version
+        run: |
+          # Use the major version only (135)
+          CHROMIUM_MAJOR_VERSION=$(echo "135.0.7049" | cut -d'.' -f1)
+          echo "Using Chromedriver version $CHROMIUM_MAJOR_VERSION"
+          wget https://chromedriver.storage.googleapis.com/$CHROMIUM_MAJOR_VERSION.0.0/chromedriver_linux64.zip || { echo "Chromedriver version $CHROMIUM_MAJOR_VERSION not found"; exit 1; }
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/bin/
           rm chromedriver_linux64.zip
-
-          # Validate Chromedriver version
           chromedriver --version
 
       # Start Chromedriver
