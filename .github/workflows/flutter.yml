@@ -19,7 +19,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-      - name: Enable Web Support for Flutter
+      - name: Enable Flutter Web Support
         run: flutter config --enable-web
       - name: Install Dependencies for Headless Chrome
         run: |
@@ -28,12 +28,14 @@ jobs:
           sudo add-apt-repository universe
           sudo apt-get update
           sudo apt-get install -y libnss3 libxss1 libasound2 fonts-liberation libappindicator3-1 libgbm-dev || sudo apt-get install -y liboss4-salsa-asound2
-      - name: Install Chrome and Chromedriver
+      - name: Install Chromedriver
         run: |
           sudo apt-get install -y chromium-browser chromium-chromedriver
           export PATH=$PATH:/usr/bin/
+      - name: Start Chromedriver
+        run: |
+          nohup chromedriver --port=4444 --url-base=/wd/hub --whitelisted-ips &
       - name: Run Integration Tests
         env:
           CHROME_EXECUTABLE: /snap/bin/chromium --headless --disable-gpu --no-sandbox
-        run: |
-          flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
+        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d chrome
