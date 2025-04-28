@@ -55,7 +55,7 @@ jobs:
         run: flutter build linux --verbose
 
       - name: List Build Directory Contents
-        run: ls -R ./build
+        run: ls -R ./build/linux/x64/debug/bundle
 
       - name: Save Build Artifacts
         uses: actions/upload-artifact@v4
