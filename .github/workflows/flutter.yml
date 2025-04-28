@@ -40,24 +40,21 @@ jobs:
           # Download and install Chromedriver
           wget $CHROMEDRIVER_URL -O chromedriver-linux64.zip
           unzip chromedriver-linux64.zip -d chromedriver-linux64
-          sudo mv chromedriver-linux64/chromedriver-linux64/chromedriver /usr/bin/
+          sudo mv chromedriver-linux64/chromedriver /usr/bin/
+
+          # Set CHROME_EXECUTABLE environment variable
+          export CHROME_EXECUTABLE=/usr/local/chrome/chrome-linux64/chrome
 
           # Verify installations
           /usr/local/chrome/chrome-linux64/chrome --version
           chromedriver --version
 
-      # Start Chromedriver
-      - name: Start Chromedriver
-        run: |
-          nohup chromedriver --port=4444 --url-base=/wd/hub --whitelisted-ips &
-
-      # Verify Chromedriver is running on port 4444
-      - name: Verify Chromedriver on Port 4444
-        run: |
-          netstat -tuln | grep 4444 || { echo "Chromedriver not running on port 4444"; exit 1; }
+      # Verify Chrome Device
+      - name: Verify Chrome Device
+        run: flutter devices
 
       # Run integration tests using Chrome
       - name: Run Integration Tests with Chrome
         env:
-          CHROME_EXECUTABLE: /usr/local/chrome/chrome-linux64/chrome --headless --disable-gpu --no-sandbox
+          CHROME_EXECUTABLE: /usr/local/chrome/chrome-linux64/chrome
         run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d chrome
