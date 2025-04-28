@@ -15,27 +15,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Build Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            build-essential \
-            pkg-config \
-            libgtk-3-dev \
-            libx11-dev \
-            libxcomposite-dev \
-            libxdamage-dev \
-            libxrandr-dev \
-            libgbm-dev \
-            libasound2-dev \
-            mesa-utils
+      - name: Install GTK 3
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev # Install GTK 3
 
-      - name: Set up virtual display
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-          Xvfb :99 -screen 0 1920x1080x24 &
-          export DISPLAY=:99
+      - name: Install Build Dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential pkg-config # Install common build dependencies
+
+      - name: Install Common Dependencies
+        run: sudo apt-get update && sudo apt-get install -y mesa-utils libglu1-mesa # Install common dependencies
+
+      - name: Install cpu-checker
+        run: sudo apt-get update && sudo apt-get install -y cpu-checker
 
       - uses: actions/setup-java@v3
         with:
@@ -72,10 +62,10 @@ jobs:
           path: build/app/outputs/apk/release/app-release.apk
 
       - name: Clean Build
-        run: flutter clean
+        run: flutter clean # Clean the build
 
       - name: Build Linux
-        run: flutter build linux --verbose
+        run: flutter build linux --verbose # Build with verbose output
 
       - name: Integration Tests (Desktop)
-        run: flutter test integration_test/app_test.dart -d linux --verbose --timeout 20m
+        run: flutter test integration_test/app_test.dart -d linux
