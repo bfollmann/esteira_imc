@@ -36,4 +36,4 @@ jobs:
         env:
           CHROME_EXECUTABLE: /snap/bin/chromium --headless --disable-gpu --no-sandbox
         run: |
-          flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d chrome
+          flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
