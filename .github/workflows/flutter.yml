@@ -37,27 +37,28 @@ jobs:
           sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
           google-chrome --version
 
-      # Install Matching Chromedriver (with improved fallback logic)
+      # Install Matching Chromedriver (with improved error handling)
       - name: Install Chromedriver with Fallback
         run: |
           CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+' | head -n 1)
           CHROME_MAJOR_VERSION=$(echo $CHROME_VERSION | cut -d. -f1)
           echo "Detected Chrome version: $CHROME_VERSION (Major: $CHROME_MAJOR_VERSION)"
 
-          # Try to find the exact matching Chromedriver version
-          CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION})
-          if [ -z "$CHROMEDRIVER_VERSION" ]; then
-            # If exact version is not found, fallback to the major version
-            echo "Exact Chromedriver version not found for $CHROME_VERSION, trying major version $CHROME_MAJOR_VERSION"
-            CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_MAJOR_VERSION})
+          # Try to fetch the exact Chromedriver version
+          CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
+          if [[ "$CHROMEDRIVER_VERSION" == *"<Error>"* ]] || [ -z "$CHROMEDRIVER_VERSION" ]; then
+            echo "Exact Chromedriver version not found for $CHROME_VERSION. Falling back to major version $CHROME_MAJOR_VERSION."
+            CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAJOR_VERSION)
           fi
-          if [ -z "$CHROMEDRIVER_VERSION" ]; then
-            # If major version is not found, fallback to the latest stable release
-            echo "Major Chromedriver version not found for $CHROME_MAJOR_VERSION, trying the latest release"
+
+          # Fallback to the latest release if major version is also unavailable
+          if [[ "$CHROMEDRIVER_VERSION" == *"<Error>"* ]] || [ -z "$CHROMEDRIVER_VERSION" ]; then
+            echo "Major Chromedriver version not found for $CHROME_MAJOR_VERSION. Falling back to the latest release."
             CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
           fi
 
-          if [ -z "$CHROMEDRIVER_VERSION" ]; then
+          # Exit if no valid Chromedriver version is found
+          if [[ "$CHROMEDRIVER_VERSION" == *"<Error>"* ]] || [ -z "$CHROMEDRIVER_VERSION" ]; then
             echo "Failed to find a matching Chromedriver version."
             exit 1
           fi
