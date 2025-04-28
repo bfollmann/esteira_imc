@@ -24,26 +24,27 @@ jobs:
       - name: Enable Flutter Web Support
         run: flutter config --enable-web
 
-      # Install dependencies required for Chromium browser
-      - name: Install Dependencies for Headless Chrome
+      # Install dependencies required for Chrome
+      - name: Install Dependencies for Chrome
         run: |
           sudo apt-get update
-          sudo apt-get install -y software-properties-common
-          sudo add-apt-repository universe
-          sudo apt-get update
-          sudo apt-get install -y libnss3 libxss1 libasound2 fonts-liberation libappindicator3-1 libgbm-dev || sudo apt-get install -y liboss4-salsa-asound2
+          sudo apt-get install -y software-properties-common apt-transport-https wget
 
-      # Install Chromium browser
-      - name: Install Chromium Browser
-        run: sudo apt-get install -y chromium-browser
-
-      # Install closest matching Chromedriver version
-      - name: Install Closest Chromedriver Version
+      # Install Google Chrome
+      - name: Install Google Chrome
         run: |
-          # Use the major version only (135)
-          CHROMIUM_MAJOR_VERSION=$(echo "135.0.7049" | cut -d'.' -f1)
-          echo "Using Chromedriver version $CHROMIUM_MAJOR_VERSION"
-          wget https://chromedriver.storage.googleapis.com/$CHROMIUM_MAJOR_VERSION.0.0/chromedriver_linux64.zip || { echo "Chromedriver version $CHROMIUM_MAJOR_VERSION not found"; exit 1; }
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
+          google-chrome --version
+
+      # Install Matching Chromedriver
+      - name: Install Matching Chromedriver
+        run: |
+          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+' | head -n 1)
+          echo "Detected Chrome version: $CHROME_VERSION"
+          CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
+          echo "Matching Chromedriver version: $CHROMEDRIVER_VERSION"
+          wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/bin/
           rm chromedriver_linux64.zip
@@ -62,5 +63,5 @@ jobs:
       # Run integration tests using the web-server device
       - name: Run Integration Tests with Web-Server
         env:
-          CHROME_EXECUTABLE: /snap/bin/chromium --headless --disable-gpu --no-sandbox
+          CHROME_EXECUTABLE: /usr/bin/google-chrome --headless --disable-gpu --no-sandbox
         run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
