@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'bmi_calculator.dart'; // Import the BMICalculator class
 
 void main() {
   runApp(const BMICalculatorApp());
@@ -32,22 +33,15 @@ class _BMICalculatorScreenState extends State<BMICalculatorScreen> {
   final _heightController = TextEditingController();
   double _bmi = 0;
   String _category = '';
+  final BMICalculator _bmiCalculator = BMICalculator(); // Create an instance of BMICalculator
 
   void _calculateBMI() {
     if (_formKey.currentState!.validate()) {
       double weight = double.parse(_weightController.text);
       double height = double.parse(_heightController.text);
       setState(() {
-        _bmi = weight / (height * height);
-        if (_bmi < 18.5) {
-          _category = 'Abaixo do peso';
-        } else if (_bmi < 25) {
-          _category = 'Peso normal';
-        } else if (_bmi < 30) {
-          _category = 'Sobrepeso';
-        } else {
-          _category = 'Obesidade';
-        }
+        _bmi = _bmiCalculator.calculateBMI(weight, height); // Use the BMICalculator instance
+        _category = _bmiCalculator.getCategory(_bmi); // Use the BMICalculator instance
       });
     }
   }
