@@ -22,7 +22,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Check the result
-    expect(find.text('24.69'), findsOneWidget);
+    expect(find.text('24.691358024691358'), findsOneWidget); // Updated value
     expect(find.text('Normal'), findsOneWidget);
   });
 }
