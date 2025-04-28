@@ -24,38 +24,22 @@ jobs:
       - name: Enable Flutter Web Support
         run: flutter config --enable-web
 
-      # Install Chromium and Matching Chromedriver
-      - name: Install Chromium and Chromedriver
+      # Install Firefox and Geckodriver
+      - name: Install Firefox and Geckodriver
         run: |
-          # Define Chromium build number
-          BUILD_NUMBER="1320683"  # Example build number for Chromium 114
-          
-          # Download and install Chromium
-          wget https://commondatastorage.googleapis.com/chromium-browser-snapshots/Linux_x64/$BUILD_NUMBER/chrome-linux.zip
-          unzip chrome-linux.zip
-          sudo mv chrome-linux /usr/local/chromium
-
-          # Download and install Chromedriver
-          wget https://commondatastorage.googleapis.com/chromium-browser-snapshots/Linux_x64/$BUILD_NUMBER/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver_linux64/chromedriver /usr/bin/
+          sudo apt-get update
+          sudo apt-get install -y firefox
+          wget https://github.com/mozilla/geckodriver/releases/download/v0.33.0/geckodriver-v0.33.0-linux64.tar.gz
+          tar -xzf geckodriver-v0.33.0-linux64.tar.gz
+          sudo mv geckodriver /usr/bin/
+          rm geckodriver-v0.33.0-linux64.tar.gz
 
           # Verify installations
-          /usr/local/chromium/chrome --version
-          chromedriver --version
-
-      # Start Chromedriver
-      - name: Start Chromedriver
-        run: |
-          nohup chromedriver --port=4444 --url-base=/wd/hub --whitelisted-ips &
-
-      # Verify Chromedriver is running on port 4444
-      - name: Verify Chromedriver on Port 4444
-        run: |
-          netstat -tuln | grep 4444 || { echo "Chromedriver not running on port 4444"; exit 1; }
+          firefox --version
+          geckodriver --version
 
       # Run integration tests using the web-server device
       - name: Run Integration Tests with Web-Server
         env:
-          CHROME_EXECUTABLE: /usr/local/chromium/chrome --headless --disable-gpu --no-sandbox
-        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
+          CHROME_EXECUTABLE: /usr/bin/firefox --headless
+        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d firefox
