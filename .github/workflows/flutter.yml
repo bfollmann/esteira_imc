@@ -24,22 +24,17 @@ jobs:
       - name: Enable Flutter Web Support
         run: flutter config --enable-web
 
-      # Install Firefox and Geckodriver
-      - name: Install Firefox and Geckodriver
+      # Install Firefox
+      - name: Install Firefox
         run: |
           sudo apt-get update
           sudo apt-get install -y firefox
-          wget https://github.com/mozilla/geckodriver/releases/download/v0.33.0/geckodriver-v0.33.0-linux64.tar.gz
-          tar -xzf geckodriver-v0.33.0-linux64.tar.gz
-          sudo mv geckodriver /usr/bin/
-          rm geckodriver-v0.33.0-linux64.tar.gz
-
-          # Verify installations
           firefox --version
-          geckodriver --version
 
       # Run integration tests using the web-server device
       - name: Run Integration Tests with Web-Server
         env:
-          CHROME_EXECUTABLE: /usr/bin/firefox --headless
-        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d firefox
+          FIREFOX_EXECUTABLE: /usr/bin/firefox
+        run: |
+          # Start Flutter with the web-server device
+          flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
