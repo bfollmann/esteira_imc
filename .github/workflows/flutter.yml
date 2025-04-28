@@ -38,7 +38,7 @@ jobs:
           # Download and install Chromedriver
           wget https://commondatastorage.googleapis.com/chromium-browser-snapshots/Linux_x64/$BUILD_NUMBER/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/bin/
+          sudo mv chromedriver_linux64/chromedriver /usr/bin/
 
           # Verify installations
           /usr/local/chromium/chrome --version
