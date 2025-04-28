@@ -21,4 +21,4 @@ jobs:
           channel: 'stable'
       - run: flutter pub get
       - run: flutter test # Run widget and unit tests
-      - run: flutter test integration_test/app_test.dart # Run integration tests
+      - run: flutter test integration_test/app_test.dart -d linux # Run integration tests on Linux desktop
