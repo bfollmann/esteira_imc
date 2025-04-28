@@ -43,7 +43,7 @@ jobs:
           sudo mv chromedriver-linux64/chromedriver-linux64/chromedriver /usr/bin/
 
           # Set CHROME_EXECUTABLE environment variable
-          export CHROME_EXECUTABLE=/usr/local/chrome/chrome-linux64/chrome
+          export CHROME_EXECUTABLE="/usr/local/chrome/chrome-linux64/chrome --no-sandbox"
 
           # Verify installations
           /usr/local/chrome/chrome-linux64/chrome --version
@@ -56,5 +56,5 @@ jobs:
       # Run integration tests using Chrome
       - name: Run Integration Tests with Chrome
         env:
-          CHROME_EXECUTABLE: /usr/local/chrome/chrome-linux64/chrome
+          CHROME_EXECUTABLE: "/usr/local/chrome/chrome-linux64/chrome --no-sandbox"
         run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d chrome
