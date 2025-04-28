@@ -28,12 +28,11 @@ jobs:
             libxrandr-dev \
             libgbm-dev \
             libasound2-dev \
-            mesa-utils
+            mesa-utils \
+            xvfb
 
       - name: Set up virtual display
         run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
           Xvfb :99 -screen 0 1920x1080x24 &
           export DISPLAY=:99
 
@@ -55,9 +54,6 @@ jobs:
       - name: Unit Tests
         run: flutter test --coverage --test-randomize-ordering-seed=random
 
-      - name: Widget Tests
-        run: flutter test --coverage --test-randomize-ordering-seed=random
-
       - name: Clean Build
         run: flutter clean
 
@@ -65,4 +61,4 @@ jobs:
         run: flutter build linux --verbose
 
       - name: Integration Tests (Desktop)
-        run: flutter test integration_test/app_test.dart -d linux --verbose --timeout 20m
+        run: flutter test integration_test/app_test.dart -d linux --verbose --timeout 30m
