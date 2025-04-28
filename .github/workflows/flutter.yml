@@ -19,6 +19,8 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+      - name: Enable Web Support for Flutter
+        run: flutter config --enable-web
       - name: Install Dependencies for Headless Chrome
         run: |
           sudo apt-get update
@@ -33,4 +35,5 @@ jobs:
       - name: Run Integration Tests
         env:
           CHROME_EXECUTABLE: /snap/bin/chromium --headless --disable-gpu --no-sandbox
-        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d chrome
+        run: |
+          flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d chrome
