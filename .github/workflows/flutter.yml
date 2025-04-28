@@ -24,17 +24,40 @@ jobs:
       - name: Enable Flutter Web Support
         run: flutter config --enable-web
 
-      # Install Firefox
-      - name: Install Firefox
+      # Install Chrome for Testing and Chromedriver
+      - name: Install Chrome for Testing and Chromedriver
         run: |
-          sudo apt-get update
-          sudo apt-get install -y firefox
-          firefox --version
+          # Define Chrome version and URLs
+          CHROME_VERSION="135.0.7049.114"
+          CHROME_URL="https://storage.googleapis.com/chrome-for-testing-public/$CHROME_VERSION/linux64/chrome-linux64.zip"
+          CHROMEDRIVER_URL="https://storage.googleapis.com/chrome-for-testing-public/$CHROME_VERSION/linux64/chromedriver-linux64.zip"
 
-      # Run integration tests using the web-server device
-      - name: Run Integration Tests with Web-Server
-        env:
-          FIREFOX_EXECUTABLE: /usr/bin/firefox
+          # Download and install Chrome for Testing
+          wget $CHROME_URL -O chrome-linux64.zip
+          unzip chrome-linux64.zip -d chrome-linux
+          sudo mv chrome-linux /usr/local/chrome
+
+          # Download and install Chromedriver
+          wget $CHROMEDRIVER_URL -O chromedriver-linux64.zip
+          unzip chromedriver-linux64.zip -d chromedriver-linux
+          sudo mv chromedriver-linux/chromedriver /usr/bin/
+
+          # Verify installations
+          /usr/local/chrome/chrome-linux/chrome --version
+          chromedriver --version
+
+      # Start Chromedriver
+      - name: Start Chromedriver
         run: |
-          # Start Flutter with the web-server device
-          flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
+          nohup chromedriver --port=4444 --url-base=/wd/hub --whitelisted-ips &
+
+      # Verify Chromedriver is running on port 4444
+      - name: Verify Chromedriver on Port 4444
+        run: |
+          netstat -tuln | grep 4444 || { echo "Chromedriver not running on port 4444"; exit 1; }
+
+      # Run integration tests using Chrome
+      - name: Run Integration Tests with Chrome
+        env:
+          CHROME_EXECUTABLE: /usr/local/chrome/chrome-linux/chrome --headless --disable-gpu --no-sandbox
+        run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
