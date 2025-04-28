@@ -24,19 +24,27 @@ jobs:
       - name: Enable Flutter Web Support
         run: flutter config --enable-web
 
-      # Install Pre-built Chromium and Chromedriver
+      # Install Pre-built Chromium and Chromedriver based on Build Number
       - name: Install Pre-built Chromium and Chromedriver
         run: |
-          # Version to use (example: 114.0.5735.90)
+          # Define Chromium version
           CHROMIUM_VERSION="114.0.5735.90"
 
+          # Get Chromium build number corresponding to the version
+          BUILD_NUMBER=$(curl -s https://omahaproxy.appspot.com/deps.json?version=$CHROMIUM_VERSION | jq -r '.chromium_base_position')
+          if [ -z "$BUILD_NUMBER" ]; then
+            echo "Failed to find build number for Chromium version $CHROMIUM_VERSION"
+            exit 1
+          fi
+          echo "Detected build number: $BUILD_NUMBER"
+
           # Download Chromium
-          wget https://commondatastorage.googleapis.com/chromium-browser-snapshots/Linux_x64/$CHROMIUM_VERSION/chrome-linux.zip
+          wget https://commondatastorage.googleapis.com/chromium-browser-snapshots/Linux_x64/$BUILD_NUMBER/chrome-linux.zip
           unzip chrome-linux.zip
           sudo mv chrome-linux /usr/local/chromium
 
           # Download Chromedriver
-          wget https://chromedriver.storage.googleapis.com/$CHROMIUM_VERSION/chromedriver_linux64.zip
+          wget https://commondatastorage.googleapis.com/chromium-browser-snapshots/Linux_x64/$BUILD_NUMBER/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/bin/
 
