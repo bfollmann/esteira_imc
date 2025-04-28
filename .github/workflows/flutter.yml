@@ -60,5 +60,8 @@ jobs:
       - name: Build Linux
         run: flutter build linux --verbose
 
+      - name: Launch Application (Debugging)
+        run: ./build/linux/x64/debug/bundle/esteira_imc
+
       - name: Integration Tests (Desktop)
         run: flutter test integration_test/app_test.dart -d linux --verbose --timeout 30m
