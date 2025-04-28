@@ -40,7 +40,7 @@ jobs:
           # Download and install Chromedriver
           wget $CHROMEDRIVER_URL -O chromedriver-linux64.zip
           unzip chromedriver-linux64.zip -d chromedriver-linux64
-          sudo mv chromedriver-linux64/chromedriver /usr/bin/
+          sudo mv chromedriver-linux64/chromedriver-linux64/chromedriver /usr/bin/
 
           # Set CHROME_EXECUTABLE environment variable
           export CHROME_EXECUTABLE=/usr/local/chrome/chrome-linux64/chrome
