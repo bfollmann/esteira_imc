@@ -22,7 +22,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y build-essential pkg-config # Install common build dependencies
 
       - name: Install Common Dependencies
-        run: sudo apt-get update && sudo apt-get install -y mesa-utils libglu1-mesa# Install common dependencies
+        run: sudo apt-get update && sudo apt-get install -y mesa-utils libglu1-mesa # Install common dependencies
 
       - name: Install cpu-checker
         run: sudo apt-get update && sudo apt-get install -y cpu-checker
