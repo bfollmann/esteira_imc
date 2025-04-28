@@ -32,5 +32,5 @@ jobs:
           export PATH=$PATH:/usr/lib/chromium-browser/
       - name: Run Integration Tests
         env:
-          CHROME_EXECUTABLE: google-chrome --headless --disable-gpu --no-sandbox
+          CHROME_EXECUTABLE: chromium-browser --headless --disable-gpu --no-sandbox
         run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d chrome
